@@ -1,7 +1,10 @@
+import { OperationStates, OperationTypes } from "../classes/BankAccount";
+
 export interface IAccountStatement {
     clientId: string;
     operationDate: string;
-    operationType: "Initialization" | "Deposit" | "Withdrawal";
+    operationType: OperationTypes;
     amount: number;
     balance: number;
+    operationState: OperationStates;
 }

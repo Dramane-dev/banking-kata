@@ -1,8 +1,15 @@
-import moment from "moment";
 import { v4 } from "uuid";
 import BankAccount from "./classes/BankAccount";
 
-console.log(`Script started successfully! ${moment().format("DD/MM/YYYY")}`);
-let userBankaccount: BankAccount = new BankAccount(v4(), 0.0);
+let clientId: string = v4();
+let starterAmount: number = 0.0;
+let userBankaccount: BankAccount = new BankAccount();
+
+userBankaccount.setClientId(clientId);
+userBankaccount.setAmount(starterAmount);
 userBankaccount.init();
+userBankaccount.accountStatementPrinting();
+
+let withdrawalAmount: number = 5.0;
+userBankaccount.withdrawal(withdrawalAmount);
 userBankaccount.accountStatementPrinting();
