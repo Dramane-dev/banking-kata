@@ -47,7 +47,7 @@ export default class BankAccount implements IBankAccount {
 
     public init(): string {
         let operationDate: string = moment().format("DD/MM/YYYY hh:mm:ss");
-
+        this.setBalance();
         this._setAccountStatement(OperationTypes.Initialization, OperationStates.Success, operationDate);
 
         let resultMessage: string = `Bank account with client id ${this._clientId} initialized successfully!`;

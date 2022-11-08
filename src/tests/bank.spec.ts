@@ -22,7 +22,7 @@ describe("#Bank Account class Testing", () => {
     });
 
     describe("#Bank deposit operation", () => {
-        let depositAmount: number = 10.0;
+        let depositAmount: number = 50.0;
 
         it("should return sentence string with the amount that client has deposit", () => {
             assert.equal(
@@ -36,5 +36,22 @@ describe("#Bank Account class Testing", () => {
             let balance: number = accountStatement[accountStatement.length - 1].balance;
             assert.ok(balance === depositAmount);
         });
+    });
+
+    describe("#Bank withdrawal operation", () => {
+        let withdrawalAmount: number = 12.9;
+
+        it("should return sentence string with the amount that client has withdrawal", () => {
+            assert.equal(
+                bankAccount.withdrawal(withdrawalAmount),
+                `The client ${bankAccount.getClientId()} has deposit ${withdrawalAmount} on his account successfully!`
+            );
+        });
+
+        // it("should return the balance after the client has withdrawal", () => {
+        //     let accountStatement: IAccountStatement[] = bankAccount.accountStatementPrinting();
+        //     let balance: number = accountStatement[accountStatement.length - 1].balance;
+        //     assert.ok(balance === (bankAccount.getAmount() - withdrawalAmount));
+        // });
     });
 });
