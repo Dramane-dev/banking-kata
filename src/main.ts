@@ -6,14 +6,12 @@ let starterAmount: number = 10.0;
 let userBankaccount: BankAccount = new BankAccount();
 
 userBankaccount.setClientId(clientId);
-userBankaccount.setAmount(starterAmount);
-userBankaccount.init();
-userBankaccount.accountStatementPrinting();
+userBankaccount.deposit(starterAmount);
 
-let withdrawalAmount: number = 5.0;
+let withdrawalAmount: number = 15.0;
 userBankaccount.withdrawal(withdrawalAmount);
-userBankaccount.accountStatementPrinting();
 
 let depositAmount: number = 45.0;
 userBankaccount.deposit(depositAmount);
+userBankaccount.withdrawal(withdrawalAmount);
 userBankaccount.accountStatementPrinting();

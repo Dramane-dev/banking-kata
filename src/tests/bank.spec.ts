@@ -7,19 +7,8 @@ import { IAccountStatement } from "../interfaces/AccountStatement.interface";
 
 describe("#Bank Account class Testing", () => {
     let clientId: string = v4();
-    let amount: number = 0.0;
     let bankAccount: BankAccount = new BankAccount();
     bankAccount.setClientId(clientId);
-    bankAccount.setAmount(amount);
-
-    describe("#Bank initialization", () => {
-        it("should return a string to indicate bank account initialization has finished successfully", () => {
-            assert.equal(
-                bankAccount.init(),
-                `Bank account with client id ${bankAccount.getClientId()} initialized successfully!`
-            );
-        });
-    });
 
     describe("#Bank deposit operation", () => {
         let depositAmount: number = 50.0;
@@ -40,18 +29,29 @@ describe("#Bank Account class Testing", () => {
 
     describe("#Bank withdrawal operation", () => {
         let withdrawalAmount: number = 12.9;
+        let resultMessage: string = `The client ${bankAccount.getClientId()} has deposit ${withdrawalAmount.toFixed(
+            2
+        )} on his account successfully!`;
+        let resultErrorMessage: string = `You have ${bankAccount
+            .getBalance()
+            .toFixed(2)} in your account! You should'nt withdrawal an amount greater than your balance...`;
+
+        bankAccount.accountStatementPrinting();
 
         it("should return sentence string with the amount that client has withdrawal", () => {
-            assert.equal(
-                bankAccount.withdrawal(withdrawalAmount),
-                `The client ${bankAccount.getClientId()} has deposit ${withdrawalAmount} on his account successfully!`
-            );
+            assert.equal(bankAccount.withdrawal(withdrawalAmount), resultMessage);
         });
 
-        // it("should return the balance after the client has withdrawal", () => {
-        //     let accountStatement: IAccountStatement[] = bankAccount.accountStatementPrinting();
-        //     let balance: number = accountStatement[accountStatement.length - 1].balance;
-        //     assert.ok(balance === (bankAccount.getAmount() - withdrawalAmount));
-        // });
+        it("should return sentence string asking to client to check the amount because it greater than the balance", () => {
+            bankAccount.withdrawal(bankAccount.getBalance());
+
+            assert.equal(bankAccount.withdrawal(withdrawalAmount), resultErrorMessage);
+        });
+
+        it("should return the balance after the client has withdrawal", () => {
+            let accountStatement: IAccountStatement[] = bankAccount.accountStatementPrinting();
+            let balance: number = accountStatement[accountStatement.length - 1].balance;
+            assert.ok(balance === bankAccount.getAmount() - withdrawalAmount);
+        });
     });
 });

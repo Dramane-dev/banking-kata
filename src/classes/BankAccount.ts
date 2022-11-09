@@ -15,7 +15,7 @@ export enum OperationStates {
 
 export default class BankAccount implements IBankAccount {
     private _clientId!: string;
-    private _amount!: number;
+    private _amount: number = 0.0;
     private _balance: number = 0.0;
     accountStatement: IAccountStatement[] = [];
 
@@ -37,33 +37,26 @@ export default class BankAccount implements IBankAccount {
         this._clientId = clientId;
     }
 
-    public setAmount(amount: number): void {
+    private _setAmount(amount: number): void {
         this._amount = amount;
     }
 
-    public setBalance(): void {
-        this._balance = this._amount;
-    }
-
-    public init(): string {
-        let operationDate: string = moment().format("DD/MM/YYYY hh:mm:ss");
-        this.setBalance();
-        this._setAccountStatement(OperationTypes.Initialization, OperationStates.Success, operationDate);
-
-        let resultMessage: string = `Bank account with client id ${this._clientId} initialized successfully!`;
-        return resultMessage;
+    private _setBalance(operationType: OperationTypes): void {
+        this._balance =
+            operationType === OperationTypes.Deposit || operationType === OperationTypes.Initialization
+                ? this._balance + this._amount
+                : this._balance - this._amount;
     }
 
     public deposit(depositAmount: number): string {
         if (isNaN(depositAmount)) {
             let resultErrorMessage: string = `Please verify your amount that want you deposit!`;
-            console.log(resultErrorMessage);
-            return `Please verify your amount that want you deposit!`;
+            return resultErrorMessage;
         }
 
         let operationDate: string = moment().format("DD/MM/YYYY hh:mm:ss");
-        this._amount = this._amount + depositAmount;
-        this._balance = this._amount;
+        this._setAmount(depositAmount);
+        this._setBalance(OperationTypes.Deposit);
 
         this._setAccountStatement(OperationTypes.Deposit, OperationStates.Success, operationDate);
 
@@ -74,7 +67,6 @@ export default class BankAccount implements IBankAccount {
     public withdrawal(withdrawalAmount: number): string {
         if (isNaN(withdrawalAmount)) {
             let resultErrorMessage: string = `Please verify your amount that want you withdrawal!`;
-            console.log(resultErrorMessage);
             return resultErrorMessage;
         }
 
@@ -83,20 +75,20 @@ export default class BankAccount implements IBankAccount {
                 2
             )} in your account! You should'nt withdrawal an amount greater than your balance...`;
             let operationDate: string = moment().format("DD/MM/YYYY hh:mm:ss");
+            this._setAmount(withdrawalAmount);
             this._setAccountStatement(OperationTypes.Withdrawal, OperationStates.Failed, operationDate);
             return resultErrorMessage;
         }
 
         let operationDate: string = moment().format("DD/MM/YYYY hh:mm:ss");
-        this._amount = this._amount - withdrawalAmount;
-        this._balance = this._amount;
+        this._setAmount(withdrawalAmount);
+        this._setBalance(OperationTypes.Withdrawal);
 
-        this._setAccountStatement(OperationTypes.Initialization, OperationStates.Success, operationDate);
+        this._setAccountStatement(OperationTypes.Withdrawal, OperationStates.Success, operationDate);
 
         let resultMessage: string = `The client ${this._clientId} has deposit ${withdrawalAmount.toFixed(
             2
         )} on his account successfully!`;
-        console.log(resultMessage);
         return resultMessage;
     }
 
