@@ -53,5 +53,21 @@ describe("#Bank Account class Testing", () => {
             let balance: number = accountStatement[accountStatement.length - 1].balance;
             assert.ok(balance === bankAccount.getAmount() - withdrawalAmount);
         });
+
+        it("should return failed operation state", () => {
+            let failedState: string = "Failed";
+            bankAccount.withdrawal(bankAccount.getBalance());
+            bankAccount.withdrawal(withdrawalAmount);
+            let accountStatement: IAccountStatement[] = bankAccount.accountStatementPrinting();
+            let operationState: string = accountStatement[accountStatement.length - 1].operationState;
+            assert.equal(operationState, failedState);
+        });
+    });
+
+    describe("Bank account statement printing", () => {
+        it("should return all account statement", () => {
+            let accountStatement: IAccountStatement[] = bankAccount.accountStatementPrinting();
+            assert.equal(accountStatement, bankAccount.accountStatementPrinting());
+        });
     });
 });
